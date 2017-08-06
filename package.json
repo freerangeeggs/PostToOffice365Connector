@@ -1,0 +1,24 @@
+{
+    "name": "vsts-connector-extension",
+    "version": "0.1.0",
+    "description": "Send messages to Microsoft Teams and Office 365 Groups",
+    "scripts": {
+        "copy-vsts-task-lib": "copyfiles node_modules/vsts-task-lib/**/* PostToOffice365Connector",
+        "copy-request": "copyfiles node_modules/request/**/* PostToOffice365Connector",
+        "copy-form-data": "copyfiles node_modules/form-data/**/* PostToOffice365Connector",
+        "tsc": "tsc",
+        "build": "npm run copy-request | npm run copy-form-data | npm run copy-vsts-task-lib | npm run tsc"
+    },
+    "dependencies": {
+        "request": "^2.74.0",
+        "vsts-task-lib": "^1.1.0",
+        "form-data": "^2.1.2"
+    },
+    "devDependencies": {
+        "typescript": "2.3.4",
+        "typings": "*"
+    },
+    "preferGlobal": false,
+    "private": true,
+    "license": "MIT"
+}
