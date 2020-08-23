@@ -1,4 +1,4 @@
-import taskLib = require('vsts-task-lib/task');
+import taskLib = require('azure-pipelines-task-lib/task');
 import request = require('request');
 
 export function send(urli: string, bodyi: any): void {
@@ -13,7 +13,14 @@ export function send(urli: string, bodyi: any): void {
     };
 
     request(requestData, function (error: any, response: request.RequestResponse, body: any) {
-        if (response.statusCode != 200) {
+        taskLib.debug(`Request Body: ${response.request.body}`);
+        taskLib.debug(`Response Status Code: ${response.statusCode}`);
+        taskLib.debug(`Response Body: ${response.body}`);
+        if (response.statusCode === 200) {
+            if (response.body !== 1) {
+                taskLib.warning(response.body);
+            }
+        } else {
             if (error) {
                 throw new Error(response.statusCode.toString() + ": " + error.message);
             }

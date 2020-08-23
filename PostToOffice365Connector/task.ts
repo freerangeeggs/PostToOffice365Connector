@@ -1,4 +1,4 @@
-import taskLib = require('vsts-task-lib/task');
+import taskLib = require('azure-pipelines-task-lib/task');
 import sendpackage = require('./sendpackage');
 
 try {
@@ -15,6 +15,6 @@ try {
 
     sendpackage.send(webhookUrl, payload);
 }
-catch(err) {
+catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
 }
