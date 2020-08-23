@@ -16,6 +16,8 @@ export function send(urli: string, bodyi: any): void {
         taskLib.debug(`Request Body: ${response.request.body}`);
         taskLib.debug(`Response Status Code: ${response.statusCode}`);
         taskLib.debug(`Response Body: ${response.body}`);
+        taskLib.debug(`Response Headers: ${JSON.stringify(response.headers)}`);
+
         if (response.statusCode === 200) {
             if (response.body !== 1) {
                 taskLib.warning(response.body);
