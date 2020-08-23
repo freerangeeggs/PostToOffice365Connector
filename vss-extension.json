@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "PostToOffice365Connector",
     "name": "Post To Office 365 Connector",
-    "version": "0.1.51",
+    "version": "0.1.54",
     "publisher": "freerangeeggs",
     "targets": [
         {
