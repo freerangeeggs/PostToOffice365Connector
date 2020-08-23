@@ -2,26 +2,25 @@
     "manifestVersion": 1,
     "id": "PostToOffice365Connector",
     "name": "Post To Office 365 Connector",
-    "version": "0.1.4",
+    "version": "0.1.51",
     "publisher": "freerangeeggs",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
-    ],    
+    ],
     "description": "Send a build or release message to an Office365 connector, allowing you to notify users in Microsoft Teams and Office365 Groups.",
     "icons": {
-        "default": "images/webhook128.png"        
+        "default": "images/webhook128.png"
     },
     "galleryFlags": [
         "Public"
     ],
     "categories": [
-        "Build and release"
+        "Azure Pipelines"
     ],
-    "tags": [
-    ],
-        "screenshots": [            
+    "tags": [],
+    "screenshots": [
         {
             "path": "images/screenshot3.png"
         },
@@ -49,7 +48,7 @@
             "path": "PostToOffice365Connector/icon.png"
         }
     ],
-    "content" : {
+    "content": {
         "details": {
             "path": "overview.md"
         }
