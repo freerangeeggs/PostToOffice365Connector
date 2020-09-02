@@ -38,7 +38,7 @@ steps:
     publisherId: 'freerangeeggs-dev'
     extensionName: '[Dev] Post To Office 365 Connector'
     extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
-    updateTasksVersion: false
+    updateTasksVersion: true
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
