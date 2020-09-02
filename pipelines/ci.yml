@@ -10,7 +10,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: npm install
+- script: |
+    npm i
+    npm i -g tfx-cli
   displayName: 'Install NPM packages'
 
 - script: npm run build
