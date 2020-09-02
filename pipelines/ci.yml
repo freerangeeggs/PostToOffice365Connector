@@ -12,14 +12,13 @@ pool:
 steps:
 - script: |
     npm i
-    npm i -g tfx-cli
   displayName: 'Install NPM packages'
 
 - script: npm run build
   displayName: 'Build'
 
-- script: npm run package
-  displayName: 'Package'
+- script: tfx extension create --manifest-globs vss-extension.json --publisher "freerangeeggs-dev" --extension-id "[Dev] PostToOffice365Connector"
+  displayName: 'Package for Development'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
