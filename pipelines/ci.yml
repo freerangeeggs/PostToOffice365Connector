@@ -10,6 +10,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- script: npm install
+  displayName: 'Install NPSM packages'
+
 - script: npm run build
   displayName: 'Build'
 
