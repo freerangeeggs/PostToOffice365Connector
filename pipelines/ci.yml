@@ -9,6 +9,14 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+- name: 'version.major'
+  value: '1'
+- name: 'version.minor'
+  value: '0'
+- name: 'version.revision'
+  value: $(Build.BuildId)
+
 steps:
 - task: TfxInstaller@3
   displayName: 'Install tfx-cli'
@@ -29,7 +37,7 @@ steps:
     rootFolder: 
     publisherId: 'freerangeeggs-dev'
     extensionName: '[Dev] Post To Office 365 Connector'
-    extensionVersion: '1.0.$(Build.BuildId)'
+    extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
     updateTasksVersion: false
 
 - script: |
