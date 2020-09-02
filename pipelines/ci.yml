@@ -29,7 +29,7 @@ steps:
     rootFolder: 
     publisherId: 'freerangeeggs-dev'
     extensionName: '[Dev] Post To Office 365 Connector'
-    extensionVersion: '1.0.$(BuildId)'
+    extensionVersion: '1.0.$(Build.BuildId)'
     updateTasksVersion: false
 
 - script: |
