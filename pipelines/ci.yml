@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: TfxInstaller@
+- task: TfxInstaller@1
   displayName: 'Install tfx-cli'
   inputs:
     version: "v0.8.x"
