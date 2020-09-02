@@ -10,8 +10,12 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: |
-    npm i
+- task: TfxInstaller@2
+  displayName: 'Install tfx-cli'
+  inputs:
+    version: "v0.8.x"
+
+- script: mpm i
   displayName: 'Install NPM packages'
 
 - script: npm run build
