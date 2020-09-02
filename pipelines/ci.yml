@@ -21,8 +21,16 @@ steps:
 - script: npm run build
   displayName: 'Build'
 
-- script: tfx extension create --manifest-globs vss-extension.json --publisher "freerangeeggs-dev" --extension-id "[Dev] PostToOffice365Connector"
-  displayName: 'Package for Development'
+# - script: tfx extension create --manifest-globs vss-extension.json --publisher ""
+#   displayName: 'Package for Development'
+
+- task: PackageAzureDevOpsExtension@3
+  inputs:
+    rootFolder: 
+    publisherId: 'freerangeeggs-dev'
+    extensionName: '[Dev] Post To Office 365 Connector'
+    extensionVersion: '1.0.$(BuildId)'
+    updateTasksVersion: false
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
