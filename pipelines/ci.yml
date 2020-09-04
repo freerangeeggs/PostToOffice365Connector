@@ -17,39 +17,61 @@ variables:
 - name: 'version.revision'
   value: $(Build.BuildId)
 
-steps:
-- task: TfxInstaller@3
-  displayName: 'Install tfx-cli'
-  inputs:
-    version: 'v0.7.x'
+stages:
+- stage: BuildPackage
+  displayName: 'Build and Package'
+  jobs:
+  - job: BuildPackage
+    displayName: 'Build and Package'
+    steps:
+    - task: TfxInstaller@3
+      displayName: 'Install tfx-cli'
+      inputs:
+        version: 'v0.7.x'
     
-- script: npm i
-  displayName: 'Install NPM packages'
+    - script: npm i
+      displayName: 'Install NPM packages'
 
-- script: npm run build
-  displayName: 'Build'
+    - script: npm run build
+      displayName: 'Build'
 
-- task: PackageAzureDevOpsExtension@3
-  displayName: 'Package for testing'
-  inputs:
-    rootFolder: 
-    publisherId: 'freerangeeggs-dev'
-    extensionName: '[Dev] Post To Office 365 Connector'
-    extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
-    updateTasksVersion: true
-    outputPath: '$(Build.ArtifactStagingDirectory)'
+    - task: PackageAzureDevOpsExtension@3
+      displayName: 'Package for testing'
+      inputs:
+        rootFolder: 
+        publisherId: 'freerangeeggs-dev'
+        extensionName: '[Dev] Post To Office 365 Connector'
+        extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
+        updateTasksVersion: true
+        outputPath: '$(Build.ArtifactStagingDirectory)'
 
-- task: PackageAzureDevOpsExtension@3
-  displayName: 'Package for prod'
-  inputs:
-    rootFolder: 
-    publisherId: 'freerangeeggs'
-    extensionName: 'Post To Office 365 Connector'
-    extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
-    updateTasksVersion: true
-    outputPath: '$(Build.ArtifactStagingDirectory)'
+    - task: PackageAzureDevOpsExtension@3
+      displayName: 'Package for prod'
+      inputs:
+        rootFolder: 
+        publisherId: 'freerangeeggs'
+        extensionName: 'Post To Office 365 Connector'
+        extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
+        updateTasksVersion: true
+        outputPath: '$(Build.ArtifactStagingDirectory)'
   
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'packages'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'packages'
+
+- stage: DeployDev
+  displayName: 'Deploy to Dev Account'
+  jobs:
+  - job: BuildPackage
+    displayName: 'Deploy to Dev Account'
+    steps:
+    - script: echo Deploy to Dev Account
+
+- stage: DeployProd
+  displayName: 'Deploy to Production Account'
+  jobs:
+  - job: BuildPackage
+    displayName: 'Deploy to Production Account'
+    steps:
+    - script: echo Deploy to Production Account
