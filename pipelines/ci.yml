@@ -24,13 +24,14 @@ stages:
   - job: BuildPackage
     displayName: 'Build and Package'
     steps:
+    
+    - script: npm i
+      displayName: 'Install NPM packages'
+
     - task: TfxInstaller@3
       displayName: 'Install tfx-cli'
       inputs:
         version: 'v0.7.x'
-
-    - script: npm i
-      displayName: 'Install NPM packages'
 
     - script: npm run build
       displayName: 'Build'
@@ -66,6 +67,10 @@ stages:
   - job: BuildPackage
     displayName: 'Deploy to Dev Account'
     steps:
+    - task: TfxInstaller@3
+      displayName: 'Install tfx-cli'
+      inputs:
+        version: 'v0.7.x'
     - script: echo Deploy to Dev Account
 
 - stage: DeployProd
@@ -74,4 +79,8 @@ stages:
   - job: BuildPackage
     displayName: 'Deploy to Production Account'
     steps:
+    - task: TfxInstaller@3
+      displayName: 'Install tfx-cli'
+      inputs:
+        version: 'v0.7.x'
     - script: echo Deploy to Production Account
