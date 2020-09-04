@@ -29,10 +29,8 @@ steps:
 - script: npm run build
   displayName: 'Build'
 
-# - script: tfx extension create --manifest-globs vss-extension.json --publisher ""
-#   displayName: 'Package for Development'
-
 - task: PackageAzureDevOpsExtension@3
+  displayName: 'Package for testing'
   inputs:
     rootFolder: 
     publisherId: 'freerangeeggs-dev'
@@ -40,7 +38,13 @@ steps:
     extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
     updateTasksVersion: true
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    - task: PackageAzureDevOpsExtension@3
+    displayName: 'Package for prod'
+    inputs:
+      rootFolder: 
+      publisherId: 'freerangeeggs'
+      extensionName: 'Post To Office 365 Connector'
+      extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
+      updateTasksVersion: true
+  
+  
