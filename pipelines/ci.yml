@@ -38,13 +38,13 @@ steps:
     extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
     updateTasksVersion: true
 
-    - task: PackageAzureDevOpsExtension@3
-    displayName: 'Package for prod'
-    inputs:
-      rootFolder: 
-      publisherId: 'freerangeeggs'
-      extensionName: 'Post To Office 365 Connector'
-      extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
-      updateTasksVersion: true
+- task: PackageAzureDevOpsExtension@3
+  displayName: 'Package for prod'
+  inputs:
+    rootFolder: 
+    publisherId: 'freerangeeggs'
+    extensionName: 'Post To Office 365 Connector'
+    extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
+    updateTasksVersion: true
   
   
