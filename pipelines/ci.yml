@@ -28,7 +28,7 @@ stages:
       displayName: 'Install tfx-cli'
       inputs:
         version: 'v0.7.x'
-    
+
     - script: npm i
       displayName: 'Install NPM packages'
 
