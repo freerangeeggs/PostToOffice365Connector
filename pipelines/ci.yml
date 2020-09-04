@@ -56,10 +56,8 @@ stages:
         updateTasksVersion: true
         outputPath: '$(Build.ArtifactStagingDirectory)'
   
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'packages'
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: 'packages'
 
 - stage: DeployDev
   displayName: 'Deploy to Dev Account'
@@ -67,6 +65,9 @@ stages:
   - job: BuildPackage
     displayName: 'Deploy to Dev Account'
     steps:
+    - checkout: none
+    - download: current
+      artifact: 'packages'
     - task: TfxInstaller@3
       displayName: 'Install tfx-cli'
       inputs:
@@ -79,6 +80,9 @@ stages:
   - job: BuildPackage
     displayName: 'Deploy to Production Account'
     steps:
+    - checkout: none
+    - download: current
+      artifact: 'packages'
     - task: TfxInstaller@3
       displayName: 'Install tfx-cli'
       inputs:
