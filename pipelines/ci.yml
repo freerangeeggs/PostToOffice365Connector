@@ -47,4 +47,9 @@ steps:
     extensionVersion: '$(version.major).$(version.minor).$(Build.BuildId)'
     updateTasksVersion: true
   
-  
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)//*vsix'
+    ArtifactName: 'packages'
+    publishLocation: 'Container'
+    
