@@ -17,6 +17,16 @@ variables:
 - name: 'version.revision'
   value: $(Build.BuildId)
 
+# These ones to be replaced with build variables
+- name: 'publisher.id.production'
+  value: 'freerangeeggs'
+- name: 'publisher.id.development'
+  value: 'freerangeeggs-dev'
+- name: 'task.id.production'
+  value: 'de88fedd-bc2d-4045-b476-17d35a3fee55'
+- name: 'task.id.development'
+  value: 'de88fedd-bc2d-4045-b476-17d35a3fee56'
+
 stages:
 - stage: BuildPackage
   displayName: 'Build and Package'
@@ -40,7 +50,7 @@ stages:
       displayName: 'Package for testing'
       inputs:
         rootFolder: 
-        publisherId: 'freerangeeggs-dev'
+        publisherId: '$(publisher.id.development)'
         extensionName: '[Dev] Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
@@ -50,7 +60,7 @@ stages:
       displayName: 'Package for prod'
       inputs:
         rootFolder: 
-        publisherId: 'freerangeeggs'
+        publisherId: '$(publisher.id.production)'
         extensionName: 'Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
