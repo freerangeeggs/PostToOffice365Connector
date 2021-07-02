@@ -1,31 +1,8 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
   vmImage: 'ubuntu-latest'
-
-variables:
-- name: 'version.major'
-  value: '1'
-- name: 'version.minor'
-  value: '0'
-- name: 'version.revision'
-  value: $(Build.BuildId)
-
-# These ones to be replaced with build variables
-- name: 'publisher.id.production'
-  value: 'freerangeeggs'
-- name: 'publisher.id.development'
-  value: 'freerangeeggs-dev'
-- name: 'task.id.production'
-  value: 'de88fedd-bc2d-4045-b476-17d35a3fee55'
-- name: 'task.id.development'
-  value: 'de88fedd-bc2d-4045-b476-17d35a3fee56'
 
 stages:
 - stage: BuildPackage
@@ -68,33 +45,3 @@ stages:
   
     - publish: '$(Build.ArtifactStagingDirectory)'
       artifact: 'packages'
-
-- stage: DeployDev
-  displayName: 'Deploy to Dev Account'
-  jobs:
-  - job: BuildPackage
-    displayName: 'Deploy to Dev Account'
-    steps:
-    - checkout: none
-    - download: current
-      artifact: 'packages'
-    - task: TfxInstaller@3
-      displayName: 'Install tfx-cli'
-      inputs:
-        version: 'v0.7.x'
-    - script: echo Deploy to Dev Account
-
-- stage: DeployProd
-  displayName: 'Deploy to Production Account'
-  jobs:
-  - job: BuildPackage
-    displayName: 'Deploy to Production Account'
-    steps:
-    - checkout: none
-    - download: current
-      artifact: 'packages'
-    - task: TfxInstaller@3
-      displayName: 'Install tfx-cli'
-      inputs:
-        version: 'v0.7.x'
-    - script: echo Deploy to Production Account
