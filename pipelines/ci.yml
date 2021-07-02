@@ -39,6 +39,7 @@ stages:
         extensionName: '[Dev] Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
+        updateTasksId: '$(task.id.development)'
         outputPath: '$(Build.ArtifactStagingDirectory)'
 
     - task: PackageAzureDevOpsExtension@3
@@ -49,6 +50,7 @@ stages:
         extensionName: 'Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
+        updateTasksId: '$(task.id.production)'
         outputPath: '$(Build.ArtifactStagingDirectory)'
   
     - publish: '$(Build.ArtifactStagingDirectory)'
