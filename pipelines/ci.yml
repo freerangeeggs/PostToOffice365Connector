@@ -4,6 +4,14 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+- name: 'version.major'
+  value: '1'
+- name: 'version.minor'
+  value: '0'
+- name: 'version.revision'
+  value: $(Build.BuildId)
+
 stages:
 - stage: BuildPackage
   displayName: 'Build and Package'
