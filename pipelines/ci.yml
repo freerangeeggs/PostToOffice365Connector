@@ -33,6 +33,12 @@ stages:
     - script: npm run build
       displayName: 'Build'
 
+    - task: RegExMatchReplace@1
+      inputs:
+        PathToFile: '/**/task.json'
+        RegEx: '\[\[TASK_ID\]\]'
+        ValueToReplace: '$(task.id.development)'
+
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for testing'
       inputs:
@@ -44,6 +50,12 @@ stages:
         updateTasksId: true
         outputPath: '$(Build.ArtifactStagingDirectory)'
 
+    - task: RegExMatchReplace@1
+      inputs:
+        PathToFile: '/**/task.json'
+        RegEx: '$(task.id.development)'
+        ValueToReplace: '$(task.id.production)'
+
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for prod'
       inputs:
@@ -52,7 +64,6 @@ stages:
         extensionName: 'Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
-        updateTasksId: '$(task.id.production)'
         outputPath: '$(Build.ArtifactStagingDirectory)'
   
     - publish: '$(Build.ArtifactStagingDirectory)'
