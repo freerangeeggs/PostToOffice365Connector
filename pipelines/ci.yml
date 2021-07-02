@@ -5,6 +5,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+- name: 'system.debug'
+  value: true
 - name: 'version.major'
   value: '1'
 - name: 'version.minor'
