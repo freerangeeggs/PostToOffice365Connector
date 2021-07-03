@@ -35,7 +35,7 @@ stages:
 
     - task: RegExMatchReplace@1
       inputs:
-        PathToFile: '/**/task.json'
+        PathToFile: '*/**/task.json'
         RegEx: '\[\[TASK_ID\]\]'
         ValueToReplace: '$(task.id.development)'
 
