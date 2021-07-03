@@ -1,5 +1,5 @@
 {
-  "id": "[[TASK_ID]]",
+  "id": "TASK_ID",
   "name": "PostToOffice365Connector",
   "friendlyName": "Post to Office365 Connector",
   "description": "Sends a message to an Office365 connector.",

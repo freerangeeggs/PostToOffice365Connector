@@ -37,7 +37,7 @@ stages:
       inputs:
         WorkingDirectory: '$(Pipeline.Workspace)'
         PathToFile: '*/**/task.json'
-        RegEx: '\[\[TASK_ID\]\]'
+        RegEx: 'TASK_ID'
         ValueToReplace: '$(task.id.development)'
 
     - task: PackageAzureDevOpsExtension@3
