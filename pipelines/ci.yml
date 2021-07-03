@@ -35,6 +35,7 @@ stages:
 
     - task: RegExMatchReplace@1
       inputs:
+        WorkingDirectory: '$(Pipeline.Workspace)'
         PathToFile: '*/**/task.json'
         RegEx: '\[\[TASK_ID\]\]'
         ValueToReplace: '$(task.id.development)'
