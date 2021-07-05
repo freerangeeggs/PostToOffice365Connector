@@ -99,6 +99,14 @@ stages:
             inputs:
               version: 'v0.7.x'
 
+          - task: PublishAzureDevOpsExtension@3
+            inputs:
+              connectTo: 'VsTeam'
+              connectedServiceName: 'VS Marketplace - Dev'
+              fileType: 'vsix'
+              vsixFile: 'development.vsix'
+              updateTasksVersion: false
+
 - stage: DeployProd
   displayName: 'Deploy to Production'
   dependsOn: 'DeployDev'
