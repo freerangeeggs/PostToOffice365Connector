@@ -94,6 +94,9 @@ stages:
         deploy:
           steps:
 
+          - download: current
+            artifact: 'packages'
+
           - task: TfxInstaller@3
             displayName: 'Install tfx-cli'
             inputs:
@@ -104,7 +107,7 @@ stages:
               connectTo: 'VsTeam'
               connectedServiceName: 'VS Marketplace - Dev'
               fileType: 'vsix'
-              vsixFile: 'development.vsix'
+              vsixFile: 'packages/$(publisher.id.development).PostToOffice365Connector-$(version.major).$(version.minor).$(version.revision).vsix'
               updateTasksVersion: false
 
 - stage: DeployProd
@@ -121,6 +124,9 @@ stages:
       runOnce:
         deploy:
           steps:
+
+          - download: current
+            artifact: 'packages'
 
           - task: TfxInstaller@3
             displayName: 'Install tfx-cli'
