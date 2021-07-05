@@ -36,8 +36,8 @@ stages:
     - task: replacetokens@3
       inputs:
         targetFiles: |
-          '**/task.development.json'
-          '**/task.production.json'
+          **/task.development.json
+          **/task.production.json
         encoding: 'auto'
         writeBOM: true
         actionOnMissing: 'warn'
