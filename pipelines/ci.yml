@@ -34,6 +34,7 @@ stages:
       displayName: 'Build'
 
     - task: replacetokens@3
+      displayName: 'Replace variables'
       inputs:
         targetFiles: |
           **/task.development.json
@@ -50,7 +51,7 @@ stages:
     
     - script: |
         mv -f ./PostToOffice365Connector/task.development.json ./PostToOffice365Connector/task.json
-      displayName: 'add development Task'
+      displayName: 'Add development task'
 
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for testing'
@@ -64,7 +65,7 @@ stages:
     
     - script: |
         mv -f ./PostToOffice365Connector/task.production.json ./PostToOffice365Connector/task.json
-      displayName: 'add development Task'
+      displayName: 'Add production task'
 
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for prod'
@@ -78,3 +79,37 @@ stages:
   
     - publish: '$(Build.ArtifactStagingDirectory)'
       artifact: 'packages'
+
+- stage: Deploy
+  jobs:
+  - deployment: DeployDev
+    displayName: Deploy to Dev
+    pool:
+      vmImage: 'Ubuntu-latest'
+      
+    environment: 'development'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - task: TfxInstaller@3
+            displayName: 'Install tfx-cli'
+            inputs:
+              version: 'v0.7.x'
+
+  - deployment: DeployProd
+    displayName: Deploy to Prod
+    pool:
+      vmImage: 'Ubuntu-latest'
+      
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - task: TfxInstaller@3
+            displayName: 'Install tfx-cli'
+            inputs:
+              version: 'v0.7.x'
