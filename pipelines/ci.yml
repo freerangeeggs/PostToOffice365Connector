@@ -105,7 +105,7 @@ stages:
           - task: PublishAzureDevOpsExtension@3
             inputs:
               connectTo: 'VsTeam'
-              connectedServiceName: 'VS Marketplace - Dev'
+              connectedServiceName: 'VS Marketplace'
               fileType: 'vsix'
               vsixFile: '../packages/$(publisher.id.development).PostToOffice365Connector-$(version.major).$(version.minor).$(version.revision).vsix'
               updateTasksVersion: false
