@@ -33,13 +33,28 @@ stages:
     - script: npm run build
       displayName: 'Build'
 
-    - task: RegExMatchReplace@1
-      inputs:
-        WorkingDirectory: '$(Pipeline.Workspace)'
-        PathToFile: '*/**/task.json'
-        RegEx: 'TASK_ID'
-        ValueToReplace: '$(task.id.development)'
+    # - task: RegExMatchReplace@1
+    #   inputs:
+    #     WorkingDirectory: '$(Pipeline.Workspace)'
+    #     PathToFile: '*/**/task.json'
+    #     RegEx: 'TASK_ID'
+    #     ValueToReplace: '$(task.id.development)'
 
+    - task: replacetokens@3
+      inputs:
+        targetFiles: |
+          '**/task.development.json'
+          '**/task.production.json'
+        encoding: 'auto'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        useLegacyPattern: false
+        enableTransforms: false
+        enableTelemetry: true
+        
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for testing'
       inputs:
