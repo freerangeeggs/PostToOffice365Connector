@@ -33,13 +33,6 @@ stages:
     - script: npm run build
       displayName: 'Build'
 
-    # - task: RegExMatchReplace@1
-    #   inputs:
-    #     WorkingDirectory: '$(Pipeline.Workspace)'
-    #     PathToFile: '*/**/task.json'
-    #     RegEx: 'TASK_ID'
-    #     ValueToReplace: '$(task.id.development)'
-
     - task: replacetokens@3
       inputs:
         targetFiles: |
@@ -54,7 +47,11 @@ stages:
         useLegacyPattern: false
         enableTransforms: false
         enableTelemetry: true
-        
+    
+    - script: |
+        mv -f ./PostToOffice365Connector/task.development.json ./PostToOffice365Connector/task.json
+      displayName: 'add development Task'
+
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for testing'
       inputs:
@@ -64,12 +61,10 @@ stages:
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
         outputPath: '$(Build.ArtifactStagingDirectory)'
-
-    - task: RegExMatchReplace@1
-      inputs:
-        PathToFile: '/**/task.json'
-        RegEx: '$(task.id.development)'
-        ValueToReplace: '$(task.id.production)'
+    
+    - script: |
+        mv -f ./PostToOffice365Connector/task.production.json ./PostToOffice365Connector/task.json
+      displayName: 'add development Task'
 
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package for prod'
