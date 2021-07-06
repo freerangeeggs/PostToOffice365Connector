@@ -61,6 +61,7 @@ stages:
         extensionName: '[Dev] Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
+        extensionVisibility: private
         outputPath: '$(Build.ArtifactStagingDirectory)'
     
     - script: |
@@ -75,6 +76,7 @@ stages:
         extensionName: 'Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
         updateTasksVersion: true
+        extensionVisibility: public
         outputPath: '$(Build.ArtifactStagingDirectory)'
   
     - publish: '$(Build.ArtifactStagingDirectory)'
