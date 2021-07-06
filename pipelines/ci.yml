@@ -57,6 +57,7 @@ stages:
       displayName: 'Package for testing'
       inputs:
         rootFolder: 
+        extensionId: 'PostToOffice365Connector-Dev'
         publisherId: '$(publisher.id.development)'
         extensionName: '[Dev] Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
@@ -72,6 +73,7 @@ stages:
       displayName: 'Package for prod'
       inputs:
         rootFolder: 
+        extensionId: 'PostToOffice365Connector'
         publisherId: '$(publisher.id.production)'
         extensionName: 'Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
