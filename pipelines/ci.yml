@@ -57,7 +57,7 @@ stages:
       displayName: 'Package for testing'
       inputs:
         rootFolder: 
-        extensionId: 'PostToOffice365Connector-Dev'
+        extensionId: 'PostToOffice365Connector-dev'
         publisherId: '$(publisher.id.development)'
         extensionName: '[Dev] Post To Office 365 Connector'
         extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
@@ -111,7 +111,7 @@ stages:
               connectTo: 'VsTeam'
               connectedServiceName: 'VS Marketplace'
               fileType: 'vsix'
-              vsixFile: '../packages/$(publisher.id.development).PostToOffice365Connector-$(version.major).$(version.minor).$(version.revision).vsix'
+              vsixFile: '../packages/$(publisher.id.development).PostToOffice365Connector-dev-$(version.major).$(version.minor).$(version.revision).vsix'
               updateTasksVersion: false
 
 - stage: DeployProd
