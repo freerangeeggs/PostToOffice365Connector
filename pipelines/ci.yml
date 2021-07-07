@@ -1,6 +1,9 @@
 trigger:
 - master
 
+pr:
+- master
+
 pool:
   # Needs to be Windows so `copyfiles` does the recursive copy properly
   vmImage: 'windows-latest'
@@ -10,8 +13,6 @@ variables:
   value: '1'
 - name: 'version.minor'
   value: '0'
-- name: 'version.revision'
-  value: $(Build.BuildId)
 
 name: '$(version.major).$(version.minor).$(Build.BuildId)'
 
@@ -61,7 +62,7 @@ stages:
         extensionId: 'PostToOffice365Connector-dev'
         publisherId: '$(publisher.id.development)'
         extensionName: '[Dev] Post To Office 365 Connector'
-        extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
+        extensionVersion: '$(Build.BuildNumber)'
         updateTasksVersion: true
         extensionVisibility: private
         outputPath: '$(Build.ArtifactStagingDirectory)'
@@ -77,7 +78,7 @@ stages:
         extensionId: 'PostToOffice365Connector'
         publisherId: '$(publisher.id.production)'
         extensionName: 'Post To Office 365 Connector'
-        extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
+        extensionVersion: '$(Build.BuildNumber)'
         updateTasksVersion: true
         extensionVisibility: public
         outputPath: '$(Build.ArtifactStagingDirectory)'
@@ -112,7 +113,7 @@ stages:
               connectTo: 'VsTeam'
               connectedServiceName: 'VS Marketplace'
               fileType: 'vsix'
-              vsixFile: '../packages/$(publisher.id.development).PostToOffice365Connector-dev-$(version.major).$(version.minor).$(version.revision).vsix'
+              vsixFile: '../packages/$(publisher.id.development).PostToOffice365Connector-dev-$(Build.BuildNumber).vsix'
               updateTasksVersion: false
 
 - stage: DeployProd
@@ -137,3 +138,11 @@ stages:
             displayName: 'Install tfx-cli'
             inputs:
               version: 'v0.7.x'
+
+          - task: PublishAzureDevOpsExtension@3
+            inputs:
+              connectTo: 'VsTeam'
+              connectedServiceName: 'VS Marketplace'
+              fileType: 'vsix'
+              vsixFile: '../packages/$(publisher.id.production).PostToOffice365Connector-$(Build.BuildNumber).vsix'
+              updateTasksVersion: false
