@@ -7,7 +7,7 @@
         "copy-node-modules": "copyfiles node_modules/**/* PostToOffice365Connector",
         "tsc": "tsc",
         "package": "tfx extension create --manifest-globs vss-extension.json",
-        "build": "npm run copy-node-modules | npm run tsc"
+        "build": "npm run tsc | npm run copy-node-modules"
     },
     "dependencies": {
         "azure-pipelines-task-lib": "^3.1.4",
