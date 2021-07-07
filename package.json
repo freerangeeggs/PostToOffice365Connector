@@ -4,7 +4,7 @@
     "description": "Send messages to Microsoft Teams and Office 365 Groups",
     "scripts": {
         "copy-vsts-task-lib": "copyfiles node_modules/azure-pipelines-task-lib/**/* node_modules/request/**/* node_modules/form-data/**/* node_modules/minimatch/**/* node_modules/brace-expansion/**/* node_modules/shelljs/**/* node_modules/concat-map/**/* node_modules/balanced-match/**/* node_modules/uuid/**/* node_modules/semver/**/* node_modules/q/**/* node_modules/extend/**/* node_modules/tough-cookie/**/* node_modules/psl/**/* node_modules/json-stringify-safe/**/* node_modules/safe-buffer/**/* node_modules/aws-sign2/**/* node_modules/aws4/**/* node_modules/http-signature/**/* node_modules/assert-plus/**/* node_modules/sshpk/**/* node_modules/safer-buffer/**/* node_modules/asn1/**/* PostToOffice365Connector",
-        "copy-node-modules": "copyfiles --all --follow node_modules/**/* PostToOffice365Connector",
+        "copy-node-modules": "copyfiles node_modules/**/* PostToOffice365Connector",
         "tsc": "tsc",
         "package": "tfx extension create --manifest-globs vss-extension.json",
         "build": "npm run copy-node-modules | npm run tsc"
