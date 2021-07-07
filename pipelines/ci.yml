@@ -2,6 +2,7 @@ trigger:
 - master
 
 pool:
+  # Needs to be Windows so `copyfiles` does the recursive copy properly
   vmImage: 'windows-latest'
 
 variables:
