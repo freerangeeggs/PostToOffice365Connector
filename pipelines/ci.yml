@@ -12,7 +12,7 @@ variables:
 - name: 'version.revision'
   value: $(Build.BuildId)
 
-name: '$(version.major).$(version.minor).$(version.revision)'
+name: '$(version.major).$(version.minor).$(Build.BuildId)'
 
 stages:
 - stage: BuildPackage
