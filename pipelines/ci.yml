@@ -5,14 +5,14 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-- name: 'system.debug'
-  value: true
 - name: 'version.major'
   value: '1'
 - name: 'version.minor'
   value: '0'
 - name: 'version.revision'
   value: $(Build.BuildId)
+
+name: '$(version.major).$(version.minor).$(version.revision)'
 
 stages:
 - stage: BuildPackage

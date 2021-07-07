@@ -1,0 +1,29 @@
+trigger:
+- none
+
+stages:
+- stage: TestUbuntu
+  displayName: 'Test on ubuntu-latest'
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
+  - job: 'test'
+    steps:
+    - task: PostToOffice365Connector@1
+      inputs:
+        url: 'https://roaminghen.webhook.office.com/webhookb2/348a7e99-819e-453d-bc19-75455914df72@3daad23a-70f8-4e5e-b4d9-064d7c5b6ad3/IncomingWebhook/a37f09e4a0214655986adf3806635317/e0108e4d-e79d-439c-a729-4587020413e3'
+        title: 'Test post'
+        msg: 'TESTING UBUNTU'
+
+- stage: TestWindows
+  displayName: 'Test on windows-latest'
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - job: 'test'
+    steps:
+    - task: PostToOffice365Connector@1
+      inputs:
+        url: 'https://roaminghen.webhook.office.com/webhookb2/348a7e99-819e-453d-bc19-75455914df72@3daad23a-70f8-4e5e-b4d9-064d7c5b6ad3/IncomingWebhook/a37f09e4a0214655986adf3806635317/e0108e4d-e79d-439c-a729-4587020413e3'
+        title: 'Test post'
+        msg: 'TESTING WINDOWS'
