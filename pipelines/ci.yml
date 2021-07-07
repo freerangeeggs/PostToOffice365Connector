@@ -1,26 +1,139 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  # Needs to be Windows so `copyfiles` does the recursive copy properly
+  vmImage: 'windows-latest'
 
-steps:
-- script: |
-    npm i
-  displayName: 'Install NPM packages'
+variables:
+- name: 'version.major'
+  value: '1'
+- name: 'version.minor'
+  value: '0'
+- name: 'version.revision'
+  value: $(Build.BuildId)
 
-- script: npm run build
-  displayName: 'Build'
+name: '$(version.major).$(version.minor).$(Build.BuildId)'
 
-- script: tfx extension create --manifest-globs vss-extension.json --publisher "freerangeeggs-dev" --extension-id "[Dev] PostToOffice365Connector"
-  displayName: 'Package for Development'
+stages:
+- stage: BuildPackage
+  displayName: 'Build and Package'
+  jobs:
+  - job: BuildPackage
+    displayName: 'Build and Package'
+    steps:
+    
+    - script: npm i
+      displayName: 'Install NPM packages'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    - task: TfxInstaller@3
+      displayName: 'Install tfx-cli'
+      inputs:
+        version: 'v0.7.x'
+
+    - script: npm run build
+      displayName: 'Build'
+
+    - task: replacetokens@3
+      displayName: 'Replace variables'
+      inputs:
+        targetFiles: |
+          **/task.development.json
+          **/task.production.json
+        encoding: 'auto'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        useLegacyPattern: false
+        enableTransforms: false
+        enableTelemetry: true
+    
+    - script: |
+        mv -f ./PostToOffice365Connector/task.development.json ./PostToOffice365Connector/task.json
+      displayName: 'Add development task'
+
+    - task: PackageAzureDevOpsExtension@3
+      displayName: 'Package for testing'
+      inputs:
+        rootFolder: 
+        extensionId: 'PostToOffice365Connector-dev'
+        publisherId: '$(publisher.id.development)'
+        extensionName: '[Dev] Post To Office 365 Connector'
+        extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
+        updateTasksVersion: true
+        extensionVisibility: private
+        outputPath: '$(Build.ArtifactStagingDirectory)'
+    
+    - script: |
+        mv -f ./PostToOffice365Connector/task.production.json ./PostToOffice365Connector/task.json
+      displayName: 'Add production task'
+
+    - task: PackageAzureDevOpsExtension@3
+      displayName: 'Package for prod'
+      inputs:
+        rootFolder: 
+        extensionId: 'PostToOffice365Connector'
+        publisherId: '$(publisher.id.production)'
+        extensionName: 'Post To Office 365 Connector'
+        extensionVersion: '$(version.major).$(version.minor).$(version.revision)'
+        updateTasksVersion: true
+        extensionVisibility: public
+        outputPath: '$(Build.ArtifactStagingDirectory)'
+  
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: 'packages'
+
+- stage: DeployDev
+  displayName: 'Deploy to Development'
+  jobs:
+  - deployment: DeployDev
+    displayName: Deploy to Dev
+    pool:
+      vmImage: 'Ubuntu-latest'
+      
+    environment: 'development'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - download: current
+            artifact: 'packages'
+
+          - task: TfxInstaller@3
+            displayName: 'Install tfx-cli'
+            inputs:
+              version: 'v0.7.x'
+
+          - task: PublishAzureDevOpsExtension@3
+            inputs:
+              connectTo: 'VsTeam'
+              connectedServiceName: 'VS Marketplace'
+              fileType: 'vsix'
+              vsixFile: '../packages/$(publisher.id.development).PostToOffice365Connector-dev-$(version.major).$(version.minor).$(version.revision).vsix'
+              updateTasksVersion: false
+
+- stage: DeployProd
+  displayName: 'Deploy to Production'
+  dependsOn: 'DeployDev'
+  jobs:
+  - deployment: DeployProd
+    displayName: Deploy to Prod
+    pool:
+      vmImage: 'Ubuntu-latest'
+      
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - download: current
+            artifact: 'packages'
+
+          - task: TfxInstaller@3
+            displayName: 'Install tfx-cli'
+            inputs:
+              version: 'v0.7.x'
