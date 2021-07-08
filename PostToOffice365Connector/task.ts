@@ -1,25 +1,14 @@
 import taskLib = require('azure-pipelines-task-lib/task');
-import { ApplicationInsights, IEventTelemetry } from '@microsoft/applicationinsights-web'
+import { environment } from './environment';
 import sendpackage = require('./sendpackage');
 
 
+const appInsights = require('applicationinsights');
+appInsights.setup(environment.applicationInsightsInstrumentationKey).start();
 
-// let eventTelemetry: IEventTelemetry = {
-//     name: 'Your Mother'
-// }
-
-// appInsights.trackEvent(eventTelemetry);
-
+// const telemetryClient = appInsights.defaultClient;
 
 try {
-    const appInsights = new ApplicationInsights({
-        config: {
-            instrumentationKey: '9365c5e3-3a70-41e3-8974-b9a86bd3576a'
-            /* ...Other Configuration Options... */
-        }
-    });
-    appInsights.loadAppInsights();
-
     let webhookUrl: string = taskLib.getInput('url', true);
     let title: string = taskLib.getInput('title', false);
     let msg: string = taskLib.getInput('msg', true);
@@ -35,4 +24,5 @@ try {
 }
 catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
+    appInsights
 }

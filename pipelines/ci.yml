@@ -41,6 +41,8 @@ stages:
         targetFiles: |
           **/task.development.json
           **/task.production.json
+          **/environment.ts
+          **/environment.production.ts
         encoding: 'auto'
         writeBOM: true
         actionOnMissing: 'warn'
@@ -69,6 +71,7 @@ stages:
     
     - script: |
         mv -f ./PostToOffice365Connector/task.production.json ./PostToOffice365Connector/task.json
+        mv -f ./PostToOffice365Connector/environment.production.ts ./PostToOffice365Connector/environment.ts
       displayName: 'Add production task'
 
     - task: PackageAzureDevOpsExtension@3
