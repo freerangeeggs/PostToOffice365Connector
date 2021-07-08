@@ -1,5 +1,5 @@
 import taskLib = require('azure-pipelines-task-lib/task');
-import { environment } from './environment';
+import environment = require('./environment');
 import sendpackage = require('./sendpackage');
 
 

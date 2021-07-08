@@ -1,4 +1,2 @@
 
-export const environment = {
-    applicationInsightsInstrumentationKey: '#{applicationInsights.instrumentationKey.development}#'
-};
+export const applicationInsightsInstrumentationKey: string = '#{applicationInsights.instrumentationKey.development}#';
