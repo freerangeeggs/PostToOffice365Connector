@@ -10,6 +10,7 @@
         "build": "npm run copy-node-modules | npm run tsc"
     },
     "dependencies": {
+        "@microsoft/applicationinsights-web": "^2.6.4",
         "azure-pipelines-task-lib": "^3.1.4",
         "form-data": "^4.0.0",
         "request": "^2.88.2"
