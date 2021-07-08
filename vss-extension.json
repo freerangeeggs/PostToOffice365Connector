@@ -45,6 +45,12 @@
             "path": "PostToOffice365Connector/sendpackage.js"
         },
         {
+            "path": "PostToOffice365Connector/environment.js"
+        },
+        {
+            "path": "PostToOffice365Connector/environment.production.js"
+        },
+        {
             "path": "PostToOffice365Connector/icon.png"
         }
     ],

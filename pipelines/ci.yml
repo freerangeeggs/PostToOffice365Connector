@@ -71,7 +71,7 @@ stages:
     
     - script: |
         mv -f ./PostToOffice365Connector/task.production.json ./PostToOffice365Connector/task.json
-        mv -f ./PostToOffice365Connector/environment.production.ts ./PostToOffice365Connector/environment.ts
+        mv -f ./PostToOffice365Connector/environment.production.js ./PostToOffice365Connector/environment.js
       displayName: 'Add production task'
 
     - task: PackageAzureDevOpsExtension@3
