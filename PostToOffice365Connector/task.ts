@@ -1,15 +1,15 @@
+import appInsights = require('applicationinsights');
 import taskLib = require('azure-pipelines-task-lib/task');
 import environment = require('./environment');
 import sendpackage = require('./sendpackage');
 
 
-const appInsights = require('applicationinsights');
 appInsights.setup(environment.applicationInsightsInstrumentationKey)
-    .setAutoDependencyCorrelation(true)
+    .setAutoDependencyCorrelation(false)
     .setAutoCollectRequests(true)
     .setAutoCollectPerformance(true, true)
     .setAutoCollectExceptions(true)
-    .setAutoCollectDependencies(true)
+    .setAutoCollectDependencies(false)
     .setAutoCollectConsole(true)
     .setSendLiveMetrics(false)
     .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
@@ -29,11 +29,26 @@ try {
         "themeColor": themeColor
     };
 
-    sendpackage.send(webhookUrl, payload);
+    const response = sendpackage.send(webhookUrl, payload);
 
-    telemetryClient.trackEvent({ name: "my custom event", properties: { customProperty: "custom property value" } });
+    telemetryClient.trackEvent({
+        name: 'Webhook sent',
+        properties: {
+            responseCode: response.resultCode,
+            responseBody: response.message
+        }
+    });
 }
 catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
-    appInsights
+
+    if (err instanceof Error) {
+        telemetryClient.trackException({ exception: err });
+    } else {
+        telemetryClient.trackException({ exception: new Error(err.message) });
+    }
 }
+
+telemetryClient.flush();
+
+appInsights.dispose();
