@@ -4,9 +4,18 @@ import sendpackage = require('./sendpackage');
 
 
 const appInsights = require('applicationinsights');
-appInsights.setup(environment.applicationInsightsInstrumentationKey).start();
+appInsights.setup(environment.applicationInsightsInstrumentationKey)
+    .setAutoDependencyCorrelation(true)
+    .setAutoCollectRequests(true)
+    .setAutoCollectPerformance(true, true)
+    .setAutoCollectExceptions(true)
+    .setAutoCollectDependencies(true)
+    .setAutoCollectConsole(true)
+    .setSendLiveMetrics(false)
+    .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+    .start();
 
-// const telemetryClient = appInsights.defaultClient;
+const telemetryClient = appInsights.defaultClient;
 
 try {
     let webhookUrl: string = taskLib.getInput('url', true);
@@ -21,6 +30,8 @@ try {
     };
 
     sendpackage.send(webhookUrl, payload);
+
+    telemetryClient.trackEvent({ name: "my custom event", properties: { customProperty: "custom property value" } });
 }
 catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
