@@ -32,9 +32,6 @@ stages:
       inputs:
         version: 'v0.7.x'
 
-    - script: npm run build
-      displayName: 'Build'
-
     - task: replacetokens@3
       displayName: 'Replace variables'
       inputs:
@@ -52,6 +49,9 @@ stages:
         useLegacyPattern: false
         enableTransforms: false
         enableTelemetry: true
+
+    - script: npm run build
+      displayName: 'Build'
     
     - script: |
         mv -f ./PostToOffice365Connector/task.development.json ./PostToOffice365Connector/task.json
