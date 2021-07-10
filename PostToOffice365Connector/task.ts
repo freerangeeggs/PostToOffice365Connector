@@ -2,20 +2,20 @@ import appInsights = require('applicationinsights');
 import taskLib = require('azure-pipelines-task-lib/task');
 import environment = require('./environment');
 import sendPackage = require('./sendPackage');
-
+import { v4 as uuidv4 } from 'uuid';
 
 appInsights.setup(environment.applicationInsightsInstrumentationKey)
     .setAutoDependencyCorrelation(false)
     .setAutoCollectRequests(true)
     .setAutoCollectPerformance(true, true)
     .setAutoCollectExceptions(true)
+    // Deliberately disable dependencies, I don't want the webhooks to be exposed
     .setAutoCollectDependencies(false)
     .setAutoCollectConsole(true)
-    .setSendLiveMetrics(false)
-    .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
     .start();
 
 const telemetryClient = appInsights.defaultClient;
+telemetryClient.context.keys.sessionId = uuidv4();
 
 try {
     let webhookUrl: string = taskLib.getInput('url', true);
