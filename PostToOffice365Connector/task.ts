@@ -1,7 +1,7 @@
 import appInsights = require('applicationinsights');
 import taskLib = require('azure-pipelines-task-lib/task');
 import environment = require('./environment');
-import sendpackage = require('./sendpackage');
+import sendPackage = require('./sendPackage');
 
 
 appInsights.setup(environment.applicationInsightsInstrumentationKey)
@@ -29,15 +29,7 @@ try {
         "themeColor": themeColor
     };
 
-    const response = sendpackage.send(webhookUrl, payload);
-
-    telemetryClient.trackEvent({
-        name: 'Webhook sent',
-        properties: {
-            responseCode: response.resultCode,
-            responseBody: response.message
-        }
-    });
+    sendPackage.send(webhookUrl, payload, telemetryClient);
 }
 catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
