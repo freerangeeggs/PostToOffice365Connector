@@ -32,15 +32,14 @@ stages:
       inputs:
         version: 'v0.7.x'
 
-    - script: npm run build
-      displayName: 'Build'
-
     - task: replacetokens@3
       displayName: 'Replace variables'
       inputs:
         targetFiles: |
           **/task.development.json
           **/task.production.json
+          **/environment.ts
+          **/environment.production.ts
         encoding: 'auto'
         writeBOM: true
         actionOnMissing: 'warn'
@@ -50,6 +49,9 @@ stages:
         useLegacyPattern: false
         enableTransforms: false
         enableTelemetry: true
+
+    - script: npm run build
+      displayName: 'Build'
     
     - script: |
         mv -f ./PostToOffice365Connector/task.development.json ./PostToOffice365Connector/task.json
@@ -69,6 +71,7 @@ stages:
     
     - script: |
         mv -f ./PostToOffice365Connector/task.production.json ./PostToOffice365Connector/task.json
+        mv -f ./PostToOffice365Connector/environment.production.js ./PostToOffice365Connector/environment.js
       displayName: 'Add production task'
 
     - task: PackageAzureDevOpsExtension@3
@@ -119,6 +122,8 @@ stages:
 - stage: DeployProd
   displayName: 'Deploy to Production'
   dependsOn: 'DeployDev'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
   jobs:
   - deployment: DeployProd
     displayName: Deploy to Prod
