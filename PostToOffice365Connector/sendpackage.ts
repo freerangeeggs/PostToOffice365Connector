@@ -13,7 +13,11 @@ export function send(url: string, body: any, telemetryClient?: TelemetryClient):
         body: body
     };
 
+    const startTime = Date.now();
+
     request(requestData, function (error: any, response: request.RequestResponse, body: any) {
+        const duration = Date.now() - startTime;
+
         taskLib.debug(`Request Body: ${response.request.body}`);
         taskLib.debug(`Response Status Code: ${response.statusCode}`);
         taskLib.debug(`Response Body: ${response.body}`);
@@ -25,15 +29,14 @@ export function send(url: string, body: any, telemetryClient?: TelemetryClient):
                 taskLib.warning(response.body);
             }
 
-            if (telemetryClient) {
-                telemetryClient.trackEvent({
-                    name: 'Webhook sent',
-                    properties: {
-                        responseCode: response.statusCode,
-                        responseBody: response.body
-                    }
-                });
-            }
+            telemetryClient?.trackEvent({
+                name: 'Webhook sent',
+                properties: {
+                    responseCode: response.statusCode,
+                    responseBody: response.body,
+                    duration: duration
+                }
+            });
         } else {
             if (error) {
                 throw new Error(response.statusCode.toString() + ": " + error.message);
