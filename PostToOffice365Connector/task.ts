@@ -2,7 +2,7 @@ import appInsights = require('applicationinsights');
 import taskLib = require('azure-pipelines-task-lib/task');
 import environment = require('./environment');
 import sendPackage = require('./sendPackage');
-import { v4 as uuidv4 } from 'uuid';
+import os = require('os');
 
 appInsights.setup(environment.applicationInsightsInstrumentationKey)
     .setAutoDependencyCorrelation(false)
@@ -15,7 +15,11 @@ appInsights.setup(environment.applicationInsightsInstrumentationKey)
     .start();
 
 const telemetryClient = appInsights.defaultClient;
-telemetryClient.context.keys.sessionId = uuidv4();
+telemetryClient.commonProperties = {
+    sessionId: 'hello',
+    Agent_Hostname: os.hostname(),
+    Agent_Platform: os.platform()
+}
 
 try {
     let webhookUrl: string = taskLib.getInput('url', true);

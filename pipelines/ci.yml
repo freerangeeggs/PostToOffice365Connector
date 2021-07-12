@@ -122,6 +122,8 @@ stages:
 - stage: DeployProd
   displayName: 'Deploy to Production'
   dependsOn: 'DeployDev'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
   jobs:
   - deployment: DeployProd
     displayName: Deploy to Prod
