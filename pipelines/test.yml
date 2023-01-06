@@ -9,9 +9,9 @@ stages:
   jobs:
   - job: 'test'
     steps:
-    - task: freerangeeggs.PostToOffice365Connector.PostToOffice365Connector-Task.PostToOffice365Connector@1
+    - task: freerangeeggs-dev.PostToOffice365Connector-dev.PostToOffice365Connector-Task.PostToOffice365Connector@1
       inputs:
-        url: '$(WebhookUrl)'
+        url: '$(TeamsWebhookUrl)'
         title: 'Test post'
         msg: 'TESTING UBUNTU'
 
@@ -22,8 +22,21 @@ stages:
   jobs:
   - job: 'test'
     steps:
-    - task: freerangeeggs.PostToOffice365Connector.PostToOffice365Connector-Task.PostToOffice365Connector@1
+    - task: freerangeeggs-dev.PostToOffice365Connector-dev.PostToOffice365Connector-Task.PostToOffice365Connector@1
       inputs:
-        url: '$(WebhookUrl)'
+        url: '$(TeamsWebhookUrl)'
         title: 'Test post'
         msg: 'TESTING WINDOWS'
+
+- stage: TestGroupsConnector
+  displayName: 'Test on Outlook'
+  pool:
+    vmImage: 'windows-latest'
+  jobs:
+  - job: 'test'
+    steps:
+    - task: freerangeeggs-dev.PostToOffice365Connector-dev.PostToOffice365Connector-Task.PostToOffice365Connector@1
+      inputs:
+        url: '$(OutlookWebhookUrl)'
+        title: 'Test post'
+        msg: 'TESTING Outlook Groups Connector'
