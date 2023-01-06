@@ -29,7 +29,7 @@ stages:
         msg: 'TESTING WINDOWS'
 
 - stage: TestGroupsConnector
-  displayName: 'Test on windows-latest'
+  displayName: 'Test on Outlook'
   pool:
     vmImage: 'windows-latest'
   jobs:
@@ -39,4 +39,4 @@ stages:
       inputs:
         url: '$(OutlookWebhookUrl)'
         title: 'Test post'
-        msg: 'TESTING Outlook Groups COnnector'
+        msg: 'TESTING Outlook Groups Connector'
