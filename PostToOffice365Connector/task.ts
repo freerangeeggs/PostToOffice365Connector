@@ -15,13 +15,21 @@ appInsights.setup(environment.applicationInsightsInstrumentationKey)
 
 const telemetryClient = appInsights.defaultClient;
 
+type webhookPayload = {
+    summary?: string
+    title?: string
+    text: string
+    themeColor?: string
+}
+
 try {
     let webhookUrl: string = taskLib.getInput('url', true);
     let title: string = taskLib.getInput('title', false);
     let msg: string = taskLib.getInput('msg', true);
     let themeColor: string = taskLib.getInput('themeColor', false);
 
-    let payload = {
+    let payload: webhookPayload = {
+        "summary": title === '' || undefined ? null : title,
         "title": title,
         "text": msg,
         "themeColor": themeColor
