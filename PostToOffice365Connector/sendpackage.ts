@@ -1,49 +1,47 @@
-import { TelemetryClient } from 'applicationinsights';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import taskLib = require('azure-pipelines-task-lib/task');
-import request = require('request');
 
-export function send(url: string, body: any, telemetryClient?: TelemetryClient): void {
-    let requestData = {
-        url: url,
-        method: "POST",
-        json: true,
+export async function send(url: string, body: any, appInsights?: ApplicationInsights): Promise<void> {
+
+    const req = new Request(url, {
+        method: 'POST',
         headers: {
-            "content-type": "application/json",
+            'Content-Type': 'application/json',
         },
-        body: body
-    };
+        body: body,
+    });
 
     const startTime = Date.now();
 
-    request(requestData, function (error: any, response: request.RequestResponse, body: any) {
+    try {
+        const response = await fetch(req);
         const duration = Date.now() - startTime;
 
-        taskLib.debug(`Request Body: ${response.request.body}`);
-        taskLib.debug(`Response Status Code: ${response.statusCode}`);
+        taskLib.debug(`Response Status Code: ${response.status}`);
         taskLib.debug(`Response Body: ${response.body}`);
         taskLib.debug(`Response Headers: ${JSON.stringify(response.headers)}`);
 
-        if (response.statusCode === 200) {
-            // Calls return `1` when successful, so silly
-            if (response.body !== 1) {
-                taskLib.warning(response.body);
+        // Calls return `1` when successful, so silly
+        const responseBody = await response.json();
+
+        if (response.status === 200) {
+            if (responseBody !== 1) {
+                taskLib.warning(responseBody);
             }
 
-            telemetryClient?.trackEvent({
+            appInsights?.trackEvent({
                 name: 'Webhook sent',
                 properties: {
-                    responseCode: response.statusCode,
-                    responseBody: response.body,
+                    responseCode: response.status,
+                    responseBody: responseBody,
                     duration: duration
                 }
             });
         } else {
-            if (error) {
-                throw new Error(response.statusCode.toString() + ": " + error.message);
-            }
-            else {
-                throw new Error(response.statusCode.toString() + ": " + response.request.body);
-            }
+            throw new Error(response.status.toString() + ": " + responseBody);
         }
-    });
+    }
+    catch (error) {
+        throw new Error(error.message);
+    }
 }

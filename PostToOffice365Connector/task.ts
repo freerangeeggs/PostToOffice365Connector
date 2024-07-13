@@ -1,19 +1,15 @@
-import appInsights = require('applicationinsights');
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import taskLib = require('azure-pipelines-task-lib/task');
 import environment = require('./environment');
 import sendPackage = require('./sendPackage');
 
-appInsights.setup(environment.applicationInsightsInstrumentationKey)
-    .setAutoDependencyCorrelation(false)
-    .setAutoCollectRequests(true)
-    .setAutoCollectPerformance(true, true)
-    .setAutoCollectExceptions(true)
-    // Deliberately disable dependencies, I don't want the webhooks to be exposed
-    .setAutoCollectDependencies(false)
-    .setAutoCollectConsole(true)
-    .start();
-
-const telemetryClient = appInsights.defaultClient;
+const appInsights = new ApplicationInsights({
+    config: {
+        connectionString: environment.applicationInsightsConnectionString,
+        disableCorrelationHeaders: true
+    }
+});
+appInsights.loadAppInsights();
 
 type webhookPayload = {
     summary?: string
@@ -35,18 +31,16 @@ try {
         "themeColor": themeColor
     };
 
-    sendPackage.send(webhookUrl, payload, telemetryClient);
+    await sendPackage.send(webhookUrl, payload, appInsights);
 }
 catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
 
     if (err instanceof Error) {
-        telemetryClient.trackException({ exception: err });
+        appInsights.trackException({ exception: err });
     } else {
-        telemetryClient.trackException({ exception: new Error(err.message) });
+        appInsights.trackException({ exception: new Error(err.message) });
     }
 }
 
-telemetryClient.flush();
-
-appInsights.dispose();
+appInsights.flush();

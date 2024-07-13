@@ -32,7 +32,7 @@ stages:
       inputs:
         version: 'v0.7.x'
 
-    - task: replacetokens@3
+    - task: ReplaceTokens@5
       displayName: 'Replace variables'
       inputs:
         targetFiles: |
@@ -106,12 +106,12 @@ stages:
           - download: current
             artifact: 'packages'
 
-          - task: TfxInstaller@3
+          - task: TfxInstaller@4
             displayName: 'Install tfx-cli'
             inputs:
-              version: 'v0.7.x'
+              version: 'v0.17.x'
 
-          - task: PublishAzureDevOpsExtension@3
+          - task: PublishAzureDevOpsExtension@4
             inputs:
               connectTo: 'VsTeam'
               connectedServiceName: 'VS Marketplace'
