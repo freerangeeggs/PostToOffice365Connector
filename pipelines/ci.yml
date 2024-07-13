@@ -32,7 +32,7 @@ stages:
       inputs:
         version: 'v0.7.x'
 
-    - task: replacetokens@3
+    - task: ReplaceTokens@5
       displayName: 'Replace variables'
       inputs:
         targetFiles: |
