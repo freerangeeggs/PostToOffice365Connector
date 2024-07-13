@@ -1,8 +1,8 @@
-import { TelemetryClient } from 'applicationinsights';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import taskLib = require('azure-pipelines-task-lib/task');
 import request = require('request');
 
-export function send(url: string, body: any, telemetryClient?: TelemetryClient): void {
+export function send(url: string, body: any, appInsights?: ApplicationInsights): void {
     let requestData = {
         url: url,
         method: "POST",
@@ -29,7 +29,7 @@ export function send(url: string, body: any, telemetryClient?: TelemetryClient):
                 taskLib.warning(response.body);
             }
 
-            telemetryClient?.trackEvent({
+            appInsights?.trackEvent({
                 name: 'Webhook sent',
                 properties: {
                     responseCode: response.statusCode,

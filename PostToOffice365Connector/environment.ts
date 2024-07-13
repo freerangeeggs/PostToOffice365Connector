@@ -1,2 +1,2 @@
 
-export const applicationInsightsInstrumentationKey: string = '#{applicationInsights.instrumentationKey.development}#';
+export const applicationInsightsConnectionString: string = '#{applicationInsights.connectionString.development}#';
