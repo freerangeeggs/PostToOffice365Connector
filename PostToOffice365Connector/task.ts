@@ -31,7 +31,7 @@ try {
         "themeColor": themeColor
     };
 
-    await sendPackage.send(webhookUrl, payload, appInsights);
+    sendPackage.send(webhookUrl, payload, appInsights);
 }
 catch (err) {
     taskLib.setResult(taskLib.TaskResult.Failed, err.message)
