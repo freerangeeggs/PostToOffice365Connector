@@ -1,7 +1,7 @@
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import taskLib = require('azure-pipelines-task-lib/task');
 import environment = require('./environment');
-import sendPackage = require('./sendPackage');
+import sendPackage = require('./sendpackage');
 
 const appInsights = new ApplicationInsights({
     config: {
