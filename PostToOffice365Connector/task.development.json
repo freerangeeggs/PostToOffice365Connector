@@ -1,6 +1,7 @@
 {
   "id": "#{task.id.development}#",
   "name": "PostToOffice365Connector",
+  "public": false,
   "friendlyName": "Post to Office365 Connector",
   "description": "Sends a message to an Office365 connector.",
   "author": "Brett McKenzie",
