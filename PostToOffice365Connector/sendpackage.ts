@@ -1,51 +1,49 @@
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import taskLib = require('azure-pipelines-task-lib/task');
+import request = require('request');
 
 export function send(url: string, body: any, appInsights?: ApplicationInsights): void {
-
-    const req = new Request(url, {
-        method: 'POST',
+    let requestData = {
+        url: url,
+        method: "POST",
+        json: true,
         headers: {
-            'Content-Type': 'application/json',
+            "content-type": "application/json",
         },
-        body: body,
-    });
+        body: body
+    };
 
     const startTime = Date.now();
 
-    fetch(req)
-        .then(response => {
-            const duration = Date.now() - startTime;
+    request(requestData, function (error: any, response: request.RequestResponse, body: any) {
+        const duration = Date.now() - startTime;
 
-            taskLib.debug(`Response Status Code: ${response.status}`);
-            taskLib.debug(`Response Body: ${response.body}`);
-            taskLib.debug(`Response Headers: ${JSON.stringify(response.headers)}`);
+        taskLib.debug(`Request Body: ${response.request.body}`);
+        taskLib.debug(`Response Status Code: ${response.statusCode}`);
+        taskLib.debug(`Response Body: ${response.body}`);
+        taskLib.debug(`Response Headers: ${JSON.stringify(response.headers)}`);
 
+        if (response.statusCode === 200) {
             // Calls return `1` when successful, so silly
-            response.json()
-                .then(responseBody => {
-                    if (response.status === 200) {
-                        if (responseBody !== 1) {
-                            taskLib.warning(responseBody);
-                        }
+            if (response.body !== 1) {
+                taskLib.warning(response.body);
+            }
 
-                        appInsights?.trackEvent({
-                            name: 'Webhook sent',
-                            properties: {
-                                responseCode: response.status,
-                                responseBody: responseBody,
-                                duration: duration
-                            }
-                        });
-                    } else {
-                        throw new Error(response.status.toString() + ": " + responseBody);
-                    }
-                })
-                .catch(error => {
-                    throw new Error(error.message);
-                });
-        })
-        .catch(error => {
-            throw new Error(error.message);
-        });
+            appInsights?.trackEvent({
+                name: 'Webhook sent',
+                properties: {
+                    responseCode: response.statusCode,
+                    responseBody: response.body,
+                    duration: duration
+                }
+            });
+        } else {
+            if (error) {
+                throw new Error(response.statusCode.toString() + ": " + error.message);
+            }
+            else {
+                throw new Error(response.statusCode.toString() + ": " + response.request.body);
+            }
+        }
+    });
 }
