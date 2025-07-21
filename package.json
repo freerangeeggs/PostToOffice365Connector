@@ -12,7 +12,7 @@
     "dependencies": {
         "@microsoft/applicationinsights-web": "^3.3.0",
         "azure-pipelines-task-lib": "^4.13.0",
-        "form-data": "^4.0.0",
+        "form-data": "^4.0.4",
         "request": "^2.88.2"
     },
     "devDependencies": {
